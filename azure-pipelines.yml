@@ -70,6 +70,12 @@ steps:
       arguments: '--build-arg BASEIMAGE=$(imageNameBase)'
       tags: $(imageNameBase):'myLatest'
       #tags: $(imageNameBase):$(Build.BuildNumber)
+      
+  - script: |
+      docker --version  # Check Docker version
+      echo "Building and tagging Docker image..."
+      docker build -t kimt.jfrog.io/morielp-docker:myLatest .
+    displayName: 'Build and Tag Docker Image'
   - task: Docker@2
     inputs:
       containerRegistry: 'kimt-docker'
