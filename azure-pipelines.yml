@@ -39,13 +39,19 @@ steps:
       DOCKER_VERSION=$(docker --version | grep -oP '\d+\.\d+\.\d+')
       BUILDX_URL="https://github.com/docker/buildx/releases/latest/download/buildx-linux-amd64"
 
-      # Download buildx
-      curl -SL $BUILDX_URL -o ~/.docker/cli-plugins/docker-buildx
-      chmod +x ~/.docker/cli-plugins/docker-buildx
+      if curl -SL $BUILDX_URL -o ~/.docker/cli-plugins/docker-buildx; then
+        chmod +x ~/.docker/cli-plugins/docker-buildx
+        echo "Buildx installed successfully"
+      else
+        echo "Failed to download Buildx"
+        exit 1
+      fi
 
-      # Verify installation
+      # Add to PATH
+      export PATH=$PATH:~/.docker/cli-plugins
+
+       # Verify installation
       docker buildx version
-
     displayName: 'Install Docker Buildx'
   - task: JFrogDocker@1
     inputs:
