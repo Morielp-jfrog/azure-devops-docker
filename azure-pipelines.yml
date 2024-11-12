@@ -1,8 +1,13 @@
 # Docker
+
 # Build a Docker image
 # https://docs.microsoft.com/azure/devops/pipelines/languages/docker
 
 ##
+trigger:
+- main
+pool:
+      name: default
 parameters:
 - name: prodName
   displayName: Product to Build
@@ -26,28 +31,49 @@ variables:
   imageNameBase: '$(registry)/$(targetRepo)/$(prodName)'
 
 
-trigger:
-- main
+steps:
+  - task: JFrogDocker@1
+    inputs:
+      command: 'Pull'
+      artifactoryConnection: 'kimt'
+      imageName: '$(imageNameBase)'
+      collectBuildInfo: true
+      buildName: '$(Build.DefinitionName)'
+      buildNumber: '$(Build.BuildNumber)'
+      includeEnvVars: true
+      skipLogin: false
+  - task: Docker@2
+    displayName: Build an image
+    inputs:
+      command: build
+      dockerfile: '$(Build.SourcesDirectory)/Dockerfile'
+      tags: |
+        $(tag)
 
-resources:
-- repo: self
+  - task: JFrogDocker@1
+    inputs:
+      command: 'Push'
+      artifactoryConnection: 'kimt'
+      imageName: '$(imageNameTb):$(Build.BuildNumber)'
+      collectBuildInfo: true
+      buildName: '$(Build.DefinitionName)'
+      buildNumber: '$(Build.BuildNumber)'
+      includeEnvVars: true
+      threads: '3'
+      skipLogin: false
+  - task: JFrogPublishBuildInfo@1
+    inputs:
+      artifactoryConnection: 'kimt'
+      buildName: '$(Build.DefinitionName)'
+      buildNumber: '$(Build.BuildNumber)'
+  - task: JFrogBuildScan@1
+    inputs:
+      xrayConnection: 'kimt-xray'
+      buildName: '$(Build.DefinitionName)'
+      buildNumber: '$(Build.BuildNumber)'
+      allowFailBuild: true
+      vuln: true
 
-##variables:
-##  tag: '$(Build.BuildId)'
 
-stages:
-- stage: Build
-  displayName: Build image
-  jobs:
-  - job: Build
-    displayName: Build
-    pool:
-      vmImage: ubuntu-latest
-    steps:
-    - task: Docker@2
-      displayName: Build an image
-      inputs:
-        command: build
-        dockerfile: '$(Build.SourcesDirectory)/Dockerfile'
-        tags: |
-          $(tag)
+
+
