@@ -38,7 +38,7 @@ steps:
     inputs:
       command: 'Scan'
       xrayConnection: 'kimt-xray'
-      imageName: 'nginx:latest'
+      imageName: 'postgres'
       watchesSource: 'watches'
       watches: 'morielp-azure-docker'
       allowFailBuild: true
