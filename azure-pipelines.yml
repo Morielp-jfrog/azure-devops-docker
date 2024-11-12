@@ -30,6 +30,7 @@ variables:
   buildContext: 'test-$(prodName)'
   imageNameTb: '$(registry)/$(targetRepo)/test-$(prodName)'
   imageNameBase: '$(registry)/$(targetRepo)/$(prodName)'
+  tag: 'myLatest'
 
 
 steps:
@@ -74,7 +75,7 @@ steps:
       containerRegistry: 'kimt-docker'
       repository: 'morielp-docker'
       command: 'push'
-      tags: $(Build.BuildNumber)
+      tags: $(imageNameBase):$(Build.BuildNumber)
 
 
   - task: JFrogDocker@1
