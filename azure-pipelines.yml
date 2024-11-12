@@ -23,7 +23,7 @@ parameters:
   default: 'morielp-docker'
 
 variables:
-  ##DOCKER_BUILDKIT: 1
+  DOCKER_BUILDKIT: 1
   prodName: ${{ parameters.prodName }}
   registry: ${{ parameters.registry }}
   targetRepo: ${{ parameters.targetRepo }}
