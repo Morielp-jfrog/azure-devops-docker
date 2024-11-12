@@ -16,7 +16,7 @@ parameters:
 - name: registry
   displayName: Registry Hostname
   type: string
-  default: https://kimt.jfrog.io
+  default: kimt.jfrog.io
 - name: targetRepo
   displayName: Target Repo to push to
   type: string
@@ -75,7 +75,7 @@ steps:
       command: 'Push'
       artifactoryConnection: 'kimt'
       #imageName: '$(imageNameTb):$(Build.BuildNumber)'
-      imageName: '$(imageNameBase):$(Build.BuildNumber)'
+      imageName: 'https://$(imageNameBase):$(Build.BuildNumber)'
       collectBuildInfo: true
       buildName: '$(Build.DefinitionName)'
       buildNumber: '$(Build.BuildNumber)'
