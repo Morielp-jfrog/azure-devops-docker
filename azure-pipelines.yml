@@ -90,8 +90,9 @@ steps:
     inputs:
       command: 'Push'
       artifactoryConnection: 'kimt'
-      imageName: '$(imageNameTb):$(Build.BuildNumber)'
+      #imageName: '$(imageNameTb):$(Build.BuildNumber)'
       #imageName: '$(imageNameBase):$(Build.BuildNumber)'
+      imageName: kimt.jfrog.io/morielp-docker/nginx:myLatest
       collectBuildInfo: true
       buildName: '$(Build.DefinitionName)'
       buildNumber: '$(Build.BuildNumber)'
