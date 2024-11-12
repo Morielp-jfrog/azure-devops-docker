@@ -23,6 +23,7 @@ parameters:
   default: 'morielp-docker'
 
 variables:
+  DOCKER_BUILDKIT: 1
   prodName: ${{ parameters.prodName }}
   registry: ${{ parameters.registry }}
   targetRepo: ${{ parameters.targetRepo }}
@@ -47,6 +48,7 @@ steps:
     inputs:
       command: build
       dockerfile: '$(Build.SourcesDirectory)/Dockerfile'
+      arguments: '--build-arg BASEIMAGE=$(imageNameBase)'
       tags: |
         $(tag)
 
