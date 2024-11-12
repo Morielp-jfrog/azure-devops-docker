@@ -96,6 +96,20 @@ steps:
       artifactoryConnection: 'kimt'
       buildName: '$(Build.DefinitionName)'
       buildNumber: '$(Build.BuildNumber)'
+
+  - task: JFrogDocker@1
+    inputs:
+      command: 'Scan'
+      xrayConnection: 'kimt-xray'
+      imageName: 'kimt.jfrog.io/morielp-docker/nginx:myLatest'
+      watchesSource: 'watches'
+      watches: 'morielp-azure-docker'
+      allowFailBuild: true
+      allowBypassArchiveLimits: false
+      threads: '3'
+      skipLogin: false
+
+
   - task: JFrogBuildScan@1
     inputs:
       xrayConnection: 'kimt-xray'
@@ -103,6 +117,8 @@ steps:
       buildNumber: '$(Build.BuildNumber)'
       allowFailBuild: true
       vuln: true
+
+
 
 
 
