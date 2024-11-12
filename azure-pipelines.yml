@@ -68,7 +68,7 @@ steps:
       dockerfile: '$(Build.SourcesDirectory)/Dockerfile'
       arguments: '--build-arg BASEIMAGE=$(imageNameBase)'
       tags: |
-        $(tag)
+        $(Build.BuildNumber)
 
   - task: JFrogDocker@1
     inputs:
