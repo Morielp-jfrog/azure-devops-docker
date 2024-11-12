@@ -69,6 +69,12 @@ steps:
       arguments: '--build-arg BASEIMAGE=$(imageNameBase)'
       tags: '$(Build.BuildId)'
       #tags: '$(imageNameBase):$(Build.BuildNumber)'
+  - task: Docker@2
+    inputs:
+      containerRegistry: 'kimt-docker'
+      repository: 'morielp-docker'
+      command: 'push'
+
 
   - task: JFrogDocker@1
     inputs:
@@ -82,6 +88,7 @@ steps:
       includeEnvVars: true
       threads: '3'
       skipLogin: false
+
   - task: JFrogPublishBuildInfo@1
     inputs:
       artifactoryConnection: 'kimt'
