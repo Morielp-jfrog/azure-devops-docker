@@ -1,10 +1,10 @@
 ARG BASEIMAGE
 
-FROM $BASEIMAGE
+FROM nginx
 
 #FROM nginx
 
-RUN echo $BASEIMAGE
+#RUN echo $BASEIMAGE
 
 RUN rm /etc/nginx/conf.d/*
 
