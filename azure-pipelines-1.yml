@@ -1,0 +1,55 @@
+# Docker
+
+# Build a Docker image
+# https://docs.microsoft.com/azure/devops/pipelines/languages/docker
+
+##
+trigger:
+- main
+pool:
+      name: default
+parameters:
+- name: prodName
+  displayName: Product to Build
+  type: string
+  default: 'nginx'
+- name: registry
+  displayName: Registry Hostname
+  type: string
+  default: kimt.jfrog.io
+- name: targetRepo
+  displayName: Target Repo to push to
+  type: string
+  default: 'morielp-docker'
+
+variables:
+  #DOCKER_BUILDKIT: 1
+  prodName: ${{ parameters.prodName }}
+  registry: ${{ parameters.registry }}
+  targetRepo: ${{ parameters.targetRepo }}
+  buildContext: 'test-$(prodName)'
+  imageNameTb: '$(registry)/$(targetRepo)/test-$(prodName)'
+  imageNameBase: '$(registry)/$(targetRepo)/$(prodName)'
+  tag: 'myLatest'
+
+
+steps:
+  - task: JFrogDocker@1
+    inputs:
+      command: 'Scan'
+      xrayConnection: 'kimt-xray'
+      imageName: 'nginx:latest'
+      watchesSource: 'watches'
+      watches: 'morielp-azure-docker'
+      allowFailBuild: true
+      allowBypassArchiveLimits: false
+      threads: '3'
+      skipLogin: false
+
+
+
+
+
+
+
+
