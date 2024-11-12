@@ -2,14 +2,38 @@
 # Build a Docker image
 # https://docs.microsoft.com/azure/devops/pipelines/languages/docker
 
+##
+parameters:
+- name: prodName
+  displayName: Product to Build
+  type: string
+  default: 'nginx'
+- name: registry
+  displayName: Registry Hostname
+  type: string
+  default: test.jfrog.io'
+- name: targetRepo
+  displayName: Target Repo to push to
+  type: string
+  default: 'k-docker'
+
+variables:
+  prodName: ${{ parameters.prodName }}
+  registry: ${{ parameters.registry }}
+  targetRepo: ${{ parameters.targetRepo }}
+  buildContext: 'test-$(prodName)'
+  imageNameTb: '$(registry)/$(targetRepo)/test-$(prodName)'
+  imageNameBase: '$(registry)/$(targetRepo)/$(prodName)'
+
+
 trigger:
 - main
 
 resources:
 - repo: self
 
-variables:
-  tag: '$(Build.BuildId)'
+##variables:
+##  tag: '$(Build.BuildId)'
 
 stages:
 - stage: Build
