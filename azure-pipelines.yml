@@ -74,6 +74,7 @@ steps:
       containerRegistry: 'kimt-docker'
       repository: 'morielp-docker'
       command: 'push'
+      tags: '$(imageNameBase):$(Build.BuildNumber)'
 
 
   - task: JFrogDocker@1
