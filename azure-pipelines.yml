@@ -77,15 +77,6 @@ steps:
       tags: $(imageNameBase):'myLatest'
       #tags: $(imageNameBase):$(Build.BuildNumber)
       
-
-  - task: Docker@2
-    inputs:
-      containerRegistry: 'kimt-docker'
-      repository: 'morielp-docker'
-      command: 'push'
-      tags: 'myLatest'
-
-
   - task: JFrogDocker@1
     inputs:
       command: 'Push'
