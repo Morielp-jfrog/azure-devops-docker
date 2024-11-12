@@ -9,7 +9,19 @@ trigger:
 pool:
       name: default
 
+
+
 steps:
+  - task: JFrogDocker@1
+    inputs:
+      command: 'Pull'
+      artifactoryConnection: 'kimt'
+      imageName: 'postgres'
+      collectBuildInfo: true
+      buildName: '$(Build.DefinitionName)'
+      buildNumber: '$(Build.BuildNumber)'
+      includeEnvVars: true
+      skipLogin: false
   - task: JFrogDocker@1
     inputs:
       command: 'Scan'
