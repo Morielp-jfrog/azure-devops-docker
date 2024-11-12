@@ -16,7 +16,7 @@ parameters:
 - name: registry
   displayName: Registry Hostname
   type: string
-  default: kimt.jfrog.io
+  default: https://kimt.jfrog.io
 - name: targetRepo
   displayName: Target Repo to push to
   type: string
