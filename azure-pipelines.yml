@@ -66,7 +66,7 @@ steps:
   - script: |
       docker --version  # Check Docker version
       echo "Building and tagging Docker image..."
-      docker build . -t kimt.jfrog.io/morielp-docker/nginx:myLatest2
+      docker build . -t kimt.jfrog.io/morielp-docker/nginx:$(Build.BuildNumber)
     displayName: 'Build and Tag Docker Image'
   - task: Docker@2
     displayName: Build an image
@@ -74,7 +74,7 @@ steps:
       command: build
       dockerfile: '$(Build.SourcesDirectory)/Dockerfile'
       arguments: '--build-arg BASEIMAGE=$(imageNameBase)'
-      tags: $(imageNameBase):'myLatest2'
+      tags: $(imageNameBase):$(Build.BuildNumber)
       #tags: $(imageNameBase):$(Build.BuildNumber)
       
   - task: JFrogDocker@1
@@ -83,7 +83,7 @@ steps:
       artifactoryConnection: 'kimt'
       #imageName: '$(imageNameTb):$(Build.BuildNumber)'
       #imageName: '$(imageNameBase):$(Build.BuildNumber)'
-      imageName: kimt.jfrog.io/morielp-docker/nginx:myLatest2
+      imageName: kimt.jfrog.io/morielp-docker/nginx:$(Build.BuildNumber)
       collectBuildInfo: true
       buildName: '$(Build.DefinitionName)'
       buildNumber: '$(Build.BuildNumber)'
@@ -101,7 +101,7 @@ steps:
     inputs:
       command: 'Scan'
       xrayConnection: 'kimt-xray'
-      imageName: 'kimt.jfrog.io/morielp-docker/nginx:myLatest2'
+      imageName: 'kimt.jfrog.io/morielp-docker/nginx:$(Build.BuildNumber)'
       watchesSource: 'watches'
       watches: 'morielp-azure-docker'
       allowFailBuild: true
