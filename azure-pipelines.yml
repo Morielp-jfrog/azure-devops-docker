@@ -16,11 +16,11 @@ parameters:
 - name: registry
   displayName: Registry Hostname
   type: string
-  default: test.jfrog.io'
+  default: kimt.jfrog.io
 - name: targetRepo
   displayName: Target Repo to push to
   type: string
-  default: 'k-docker'
+  default: 'morielp-docker'
 
 variables:
   prodName: ${{ parameters.prodName }}
