@@ -68,7 +68,7 @@ steps:
       command: build
       dockerfile: '$(Build.SourcesDirectory)/Dockerfile'
       arguments: '--build-arg BASEIMAGE=$(imageNameBase)'
-      tags: 'myLatest'
+      tags: $(imageNameBase):'myLatest'
       #tags: $(imageNameBase):$(Build.BuildNumber)
   - task: Docker@2
     inputs:
