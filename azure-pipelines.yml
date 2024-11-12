@@ -89,7 +89,7 @@ steps:
       buildNumber: '$(Build.BuildNumber)'
       includeEnvVars: true
       threads: '3'
-      skipLogin: false
+      #skipLogin: false
 
   - task: JFrogPublishBuildInfo@1
     inputs:
