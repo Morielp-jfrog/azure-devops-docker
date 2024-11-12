@@ -50,9 +50,7 @@ steps:
       # Add to PATH
       export PATH=$PATH:~/.docker/cli-plugins
 
-       # Verify installation
-      docker buildx version
-    displayName: 'Install Docker Buildx'
+
   - task: JFrogDocker@1
     inputs:
       command: 'Pull'
