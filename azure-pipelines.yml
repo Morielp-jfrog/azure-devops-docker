@@ -74,8 +74,8 @@ steps:
     inputs:
       command: 'Push'
       artifactoryConnection: 'kimt'
-      #imageName: '$(imageNameTb):$(Build.BuildNumber)'
-      imageName: 'https://$(imageNameBase):$(Build.BuildNumber)'
+      imageName: '$(imageNameTb):$(Build.BuildNumber)'
+      #imageName: '$(imageNameBase):$(Build.BuildNumber)'
       collectBuildInfo: true
       buildName: '$(Build.DefinitionName)'
       buildNumber: '$(Build.BuildNumber)'
