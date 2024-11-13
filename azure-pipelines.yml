@@ -78,20 +78,18 @@ steps:
       tags: $(imageNameBase):$(Build.BuildNumber)
       #tags: $(imageNameBase):$(Build.BuildNumber)
       
+
   - task: JFrogDocker@1
     inputs:
-      command: 'Push'
-      artifactoryConnection: 'kimt'
-      #imageName: '$(imageNameTb):$(Build.BuildNumber)'
-      #imageName: '$(imageNameBase):$(Build.BuildNumber)'
-      imageName: kimt.jfrog.io/morielp-docker/nginx:$(Build.BuildNumber)
-      collectBuildInfo: true
-      buildName: '$(Build.DefinitionName)'
-      buildNumber: '$(Build.BuildNumber)'
-      includeEnvVars: true
+      command: 'Scan'
+      xrayConnection: 'kimt-xray'
+      imageName: 'kimt.jfrog.io/morielp-docker/nginx:$(Build.BuildNumber)'
+      watchesSource: 'repoPath'
+      repoPath: 'morielp-docker'
+      allowFailBuild: true
+      allowBypassArchiveLimits: false
       threads: '3'
-      #skipLogin: false
-
+      skipLogin: false
   - task: JFrogPublishBuildInfo@1
     inputs:
       artifactoryConnection: 'kimt'
