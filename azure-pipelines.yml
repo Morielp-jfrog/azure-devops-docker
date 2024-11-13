@@ -84,8 +84,8 @@ steps:
       command: 'Scan'
       xrayConnection: 'kimt-xray'
       imageName: 'kimt.jfrog.io/morielp-docker/nginx:$(Build.BuildNumber)'
-      watchesSource: 'repoPath'
-      repoPath: 'morielp-docker'
+      #watchesSource: 'repoPath'
+      watchesSource: 'none'
       allowFailBuild: true
       allowBypassArchiveLimits: false
       threads: '3'
