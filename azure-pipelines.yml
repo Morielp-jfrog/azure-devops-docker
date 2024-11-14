@@ -64,19 +64,19 @@ steps:
       includeEnvVars: true
       skipLogin: false
 
-  ##- script: |
-  ##   docker --version  # Check Docker version
-  ##  echo "Building and tagging Docker image..."
-  ##    docker build . -t kimt.jfrog.io/morielp-docker/nginx:$(Build.BuildNumber)
-  ##  displayName: 'Build and Tag Docker Image'
-  - task: Docker@2
-    displayName: Build an image
-    inputs:
-      command: build
-      dockerfile: '$(Build.SourcesDirectory)/Dockerfile'
-      arguments: '--build-arg BASEIMAGE=$(imageNameBase)'
-      tags: $(imageNameBase):$(Build.BuildNumber)
-      #tags: $(imageNameBase):$(Build.BuildNumber)     
+  - script: |
+     docker --version  # Check Docker version
+     echo "Building and tagging Docker image..."
+     docker build . -t kimt.jfrog.io/morielp-docker/nginx:$(Build.BuildNumber)
+    displayName: 'Build and Tag Docker Image'
+##  - task: Docker@2
+##    displayName: Build an image
+##    inputs:
+##      command: build
+##      dockerfile: '$(Build.SourcesDirectory)/Dockerfile'
+##      arguments: '--build-arg BASEIMAGE=$(imageNameBase)'
+##      tags: $(imageNameBase):$(Build.BuildNumber)
+##      #tags: $(imageNameBase):$(Build.BuildNumber)     
 
   - task: JFrogDocker@1
     inputs:
