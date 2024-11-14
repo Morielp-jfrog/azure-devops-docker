@@ -64,11 +64,26 @@ steps:
       includeEnvVars: true
       skipLogin: false
 
+
+
   - script: |
      docker --version  # Check Docker version
      echo "Building and tagging Docker image..."
      docker build . -t kimt.jfrog.io/morielp-docker/nginx:$(Build.BuildNumber)
     displayName: 'Build and Tag Docker Image'
+
+  - task: JFrogDocker@1
+    inputs:
+      command: 'Push'
+      artifactoryConnection: 'kimt'
+      imageName: 'kimt.jfrog.io/morielp-docker/nginx:$(Build.BuildNumber)'
+      collectBuildInfo: true
+      buildName: '$(Build.DefinitionName)'
+      buildNumber: '$(Build.BuildNumber)'
+      includeEnvVars: true
+      threads: '3'
+      skipLogin: false
+
 ##  - task: Docker@2
 ##    displayName: Build an image
 ##    inputs:
