@@ -61,13 +61,11 @@ steps:
       artifactoryConnection: 'idani-artifactory'
       imageName: '$(imageNameBase)'
 
-
-
-
   - script: |
      docker --version  # Check Docker version
      echo "Building and tagging Docker image..."
      docker build . -t idani.jfrog.io/morielp-docker/library/nginx:$(Build.BuildNumber)
+     docker build . -t idani.jfrog.io/morielp-docker/library/nginx:latest
 #     docker push idani.jfrog.io/morielp-docker/library/nginx:$(Build.BuildNumber)
     displayName: 'Build and Tag Docker Image'
 
@@ -76,50 +74,26 @@ steps:
       command: 'Push'
       artifactoryConnection: 'idani-artifactory'
       imageName: 'idani.jfrog.io/morielp-docker/library/nginx:$(Build.BuildNumber)'
-#      collectBuildInfo: true
-#      buildName: '$(Build.DefinitionName)'
-#      buildNumber: '$(Build.BuildNumber)'
-#      includeEnvVars: true
+
+  - task: JFrogDocker@1
+    inputs:
+      command: 'Push'
+      artifactoryConnection: 'idani-artifactory'
+      imageName: 'idani.jfrog.io/morielp-docker/library/nginx:latest'
+
+#  - task: JFrogDocker@1
+#    inputs:
+#      command: 'Scan'
+#      xrayConnection: 'idani-xray'
+#      imageName: 'idani.jfrog.io/morielp-docker/library/nginx:$(Build.BuildNumber)'
+#      watchesSource: 'watches'
+#      watches: 'morielp'
+#      allowFailBuild: true
+#      allowBypassArchiveLimits: false
 #      threads: '3'
 #      skipLogin: false
 
 
-##  - task: Docker@2
-##    displayName: Build an image
-##    inputs:
-##      command: build
-##      dockerfile: '$(Build.SourcesDirectory)/Dockerfile'
-##      arguments: '--build-arg BASEIMAGE=$(imageNameBase)'
-##      tags: $(imageNameBase):$(Build.BuildNumber)
-##      #tags: $(imageNameBase):$(Build.BuildNumber)     
-
-  - task: JFrogDocker@1
-    inputs:
-      command: 'Scan'
-      xrayConnection: 'idani-xray'
-      imageName: 'idani.jfrog.io/morielp-docker/library/nginx:$(Build.BuildNumber)'
-      watchesSource: 'watches'
-      watches: 'morielp'
-      allowFailBuild: true
-      allowBypassArchiveLimits: false
-      threads: '3'
-      skipLogin: false
-
-#  - task: JFrogPublishBuildInfo@1
-#    inputs:
-#      artifactoryConnection: 'idani-artifactory'
-#      buildName: '$(Build.DefinitionName)'
-#      buildNumber: '$(Build.BuildNumber)'
-
-
-
-#  - task: JFrogBuildScan@1
-#    inputs:
-#      xrayConnection: 'idani-xray'
-#      buildName: '$(Build.DefinitionName)'
-#      buildNumber: '$(Build.BuildNumber)'
-#      allowFailBuild: true
-#      vuln: true
 
 
 
