@@ -96,18 +96,18 @@ steps:
   - task: JFrogDocker@1
     inputs:
       command: 'Scan'
-      xrayConnection: 'kimt-xray'
-      imageName: 'kimt.jfrog.io/morielp-docker/nginx:$(Build.BuildNumber)'
-      #watchesSource: 'repoPath'
+      xrayConnection: 'idani-xray'
+      imageName: 'idani.jfrog.io/morielp-docker/nginx:$(Build.BuildNumber)'
       watchesSource: 'watches'
-      watches: 'morielp-azure-docker'
+      watches: 'morielp'
       allowFailBuild: true
       allowBypassArchiveLimits: false
       threads: '3'
       skipLogin: false
+
   - task: JFrogPublishBuildInfo@1
     inputs:
-      artifactoryConnection: 'kimt'
+      artifactoryConnection: 'idani-artifactory'
       buildName: '$(Build.DefinitionName)'
       buildNumber: '$(Build.BuildNumber)'
 
@@ -115,7 +115,7 @@ steps:
 
   - task: JFrogBuildScan@1
     inputs:
-      xrayConnection: 'kimt-xray'
+      xrayConnection: 'idani-xray'
       buildName: '$(Build.DefinitionName)'
       buildNumber: '$(Build.BuildNumber)'
       allowFailBuild: true
