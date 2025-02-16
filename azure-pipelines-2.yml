@@ -23,14 +23,14 @@ parameters:
   default: 'morielp-docker'
 
 variables:
-  #DOCKER_BUILDKIT: 1
-  prodName: ${{ parameters.prodName }}
-  registry: ${{ parameters.registry }}
-  targetRepo: ${{ parameters.targetRepo }}
-  buildContext: 'test-$(prodName)'
-  imageNameTb: '$(registry)/$(targetRepo)/test-$(prodName)'
-  imageNameBase: '$(registry)/$(targetRepo)/$(prodName)'
-  tag: 'myLatest'
+#  #DOCKER_BUILDKIT: 1
+#  prodName: ${{ parameters.prodName }}
+#  registry: ${{ parameters.registry }}
+#  targetRepo: ${{ parameters.targetRepo }}
+#  buildContext: 'test-$(prodName)'
+#  imageNameTb: '$(registry)/$(targetRepo)/test-$(prodName)'
+#  imageNameBase: '$(registry)/$(targetRepo)/$(prodName)'
+#  tag: 'myLatest'
   JFROG_CLI_LOG_LEVEL: DEBUG
 
 
