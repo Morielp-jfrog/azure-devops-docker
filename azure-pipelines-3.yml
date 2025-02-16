@@ -58,8 +58,8 @@ steps:
   - task: JFrogDocker@1
     inputs:
       command: 'Pull'
-      artifactoryConnection: 'idani-arifactory'
-      imageName: 'idani.jfro.io/morielp-docker/337556'
+      artifactoryConnection: 'idani-artifactory'
+      imageName: 'idani.jfrog.io/morielp-docker/337556'
 
   - script: |
      docker --version  # Check Docker version
