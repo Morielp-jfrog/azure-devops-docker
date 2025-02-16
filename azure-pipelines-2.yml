@@ -64,8 +64,8 @@ steps:
   - script: |
      docker --version  # Check Docker version
      echo "Building and tagging Docker image..."
-     docker build . -t idani.jfrog.io/morielp-docker/library/nginx:$(Build.BuildNumber)
-     docker build . -t idani.jfrog.io/morielp-docker/library/nginx:latest
+     docker build . -t idani.jfrog.io/morielp-docker/library/337556:$(Build.BuildNumber)
+     docker build . -t idani.jfrog.io/morielp-docker/library/337556:latest
 #     docker push idani.jfrog.io/morielp-docker/library/nginx:$(Build.BuildNumber)
     displayName: 'Build and Tag Docker Image'
 
@@ -73,13 +73,13 @@ steps:
     inputs:
       command: 'Push'
       artifactoryConnection: 'idani-artifactory'
-      imageName: 'idani.jfrog.io/morielp-docker/library/nginx:$(Build.BuildNumber)'
+      imageName: 'idani.jfrog.io/morielp-docker/library/337556:$(Build.BuildNumber)'
 
   - task: JFrogDocker@1
     inputs:
       command: 'Push'
       artifactoryConnection: 'idani-artifactory'
-      imageName: 'idani.jfrog.io/morielp-docker/library/nginx:latest'
+      imageName: 'idani.jfrog.io/morielp-docker/library/337556:latest'
 
 #  - task: JFrogDocker@1
 #    inputs:
