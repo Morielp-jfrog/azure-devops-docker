@@ -59,7 +59,7 @@ steps:
     inputs:
       command: 'Pull'
       artifactoryConnection: 'idani-artifactory'
-      imageName: '$(imageNameBase)'
+      imageName: '337556'
 
   - script: |
      docker --version  # Check Docker version
