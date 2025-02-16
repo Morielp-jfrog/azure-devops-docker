@@ -51,6 +51,9 @@ steps:
 
       # Add to PATH
       export PATH=$PATH:~/.docker/cli-plugins
+
+      sudo usermod -a -G docker $(whoami)
+      sudo chmod 0666 /var/run/docker.sock
       
   - task: JFrogDocker@1
     inputs:
