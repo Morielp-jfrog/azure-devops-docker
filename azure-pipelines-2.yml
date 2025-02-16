@@ -88,7 +88,10 @@ steps:
       imageName: 'idani.jfrog.io/morielp-docker/337556:latest'
 
 
-
+  - task: JfrogCliV2@1
+    inputs:
+      jfrogPlatformConnection: 'idani'
+      command: 'jf xr cl api/v2/index -H ''Content-Type:application/json'' -d ''{"repo_path":"morielp-docker-local/337556/latest/manifest.json"}'''
 
 
 
