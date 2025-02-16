@@ -59,7 +59,7 @@ steps:
     inputs:
       command: 'Pull'
       artifactoryConnection: 'idani-artifactory'
-      imageName: 'idani.jfrog.io/morielp-docker/337556'
+      imageName: 'idani.jfrog.io/morielp-docker/nginx/200'
 
   - script: |
      docker --version  # Check Docker version
