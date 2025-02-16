@@ -78,7 +78,7 @@ steps:
     inputs:
       command: 'Push'
       artifactoryConnection: 'idani-artifactory'
-      imageName: 'idani.jfrog.io/morielp-docker/nginx:$(Build.BuildNumber)'
+      imageName: 'idani.jfrog.io/morielp-docker/library/nginx:$(Build.BuildNumber)'
       collectBuildInfo: true
       buildName: '$(Build.DefinitionName)'
       buildNumber: '$(Build.BuildNumber)'
