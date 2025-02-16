@@ -81,17 +81,13 @@ steps:
       artifactoryConnection: 'idani-artifactory'
       imageName: 'idani.jfrog.io/morielp-docker/337556:latest'
 
-#  - task: JFrogDocker@1
-#    inputs:
-#      command: 'Scan'
-#      xrayConnection: 'idani-xray'
-#      imageName: 'idani.jfrog.io/morielp-docker/library/nginx:$(Build.BuildNumber)'
-#      watchesSource: 'watches'
-#      watches: 'morielp'
-#      allowFailBuild: true
-#      allowBypassArchiveLimits: false
-#      threads: '3'
-#      skipLogin: false
+  - task: JFrogDocker@1
+    inputs:
+      command: 'Scan'
+      xrayConnection: 'idani-xray'
+      imageName: 'idani.jfrog.io/morielp-docker/337556:latest'
+
+
 
 
 
