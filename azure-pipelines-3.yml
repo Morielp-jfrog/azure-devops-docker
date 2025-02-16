@@ -1,0 +1,95 @@
+# Docker
+
+# Build a Docker image
+# https://docs.microsoft.com/azure/devops/pipelines/languages/docker
+
+##
+trigger:
+- main
+pool:
+      name: default
+parameters:
+- name: prodName
+  displayName: Product to Build
+  type: string
+  default: 'nginx'
+- name: registry
+  displayName: Registry Hostname
+  type: string
+  default: 34.89.16.107
+- name: targetRepo
+  displayName: Target Repo to push to
+  type: string
+  default: 'morielp-docker'
+
+variables:
+#  #DOCKER_BUILDKIT: 1
+#  prodName: ${{ parameters.prodName }}
+#  registry: ${{ parameters.registry }}
+#  targetRepo: ${{ parameters.targetRepo }}
+#  buildContext: 'test-$(prodName)'
+#  imageNameTb: '$(registry)/$(targetRepo)/test-$(prodName)'
+#  imageNameBase: '$(registry)/$(targetRepo)/$(prodName)'
+#  tag: 'myLatest'
+  JFROG_CLI_LOG_LEVEL: DEBUG
+
+
+steps:
+  - script: |
+      # Install Buildx
+      mkdir -p ~/.docker/cli-plugins
+      DOCKER_VERSION=$(docker --version | grep -oP '\d+\.\d+\.\d+')
+      BUILDX_URL="https://github.com/docker/buildx/releases/latest/download/buildx-linux-amd64"
+
+      if curl -SL $BUILDX_URL -o ~/.docker/cli-plugins/docker-buildx; then
+        chmod +x ~/.docker/cli-plugins/docker-buildx
+        echo "Buildx installed successfully"
+      else
+        echo "Failed to download Buildx"
+        exit 1
+      fi
+
+      # Add to PATH
+      export PATH=$PATH:~/.docker/cli-plugins
+
+      sudo usermod -a -G docker $(whoami)
+      sudo chmod 0666 /var/run/docker.sock
+      
+  - task: JFrogDocker@1
+    inputs:
+      command: 'Pull'
+      artifactoryConnection: 'idani-arifactory'
+      imageName: 'idani.jfro.io/morielp-docker/337556'
+
+  - script: |
+     docker --version  # Check Docker version
+     echo "Building and tagging Docker image..."
+     docker build . -t 34.89.16.107/morielp-docker/337556:$(Build.BuildNumber)
+     docker build . -t 34.89.16.107/morielp-docker/337556:latest
+#     docker push idani.jfrog.io/morielp-docker/library/nginx:$(Build.BuildNumber)
+    displayName: 'Build and Tag Docker Image'
+
+  - task: JFrogDocker@1
+    inputs:
+      command: 'Push'
+      artifactoryConnection: '34.89.16.107-rt'
+      imageName: '34.89.16.107/morielp-docker/337556:$(Build.BuildNumber)'
+
+  - task: JFrogDocker@1
+    inputs:
+      command: 'Push'
+      artifactoryConnection: '34.89.16.107-rt'
+      imageName: '34.89.16.107/morielp-docker/337556:latest'
+
+#  - task: JFrogDocker@1
+#    inputs:
+#      command: 'Scan'
+#      xrayConnection: '34.89.16.107-xr'
+#      imageName: '34.89.16.107/morielp-docker/337556:latest'
+
+
+#  - task: JfrogCliV2@1
+#    inputs:
+#      jfrogPlatformConnection: 'idani'
+#      command: 'jf xr cl api/v2/index -H ''Content-Type:application/json'' -d ''{"repo_path":"morielp-docker-local/337556/latest/manifest.json"}'''
+#
