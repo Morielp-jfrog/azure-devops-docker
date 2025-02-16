@@ -1,0 +1,130 @@
+# Docker
+
+# Build a Docker image
+# https://docs.microsoft.com/azure/devops/pipelines/languages/docker
+
+##
+trigger:
+- main
+pool:
+      name: default
+parameters:
+- name: prodName
+  displayName: Product to Build
+  type: string
+  default: 'nginx'
+- name: registry
+  displayName: Registry Hostname
+  type: string
+  default: idani.jfrog.io
+- name: targetRepo
+  displayName: Target Repo to push to
+  type: string
+  default: 'morielp-docker'
+
+variables:
+  #DOCKER_BUILDKIT: 1
+  prodName: ${{ parameters.prodName }}
+  registry: ${{ parameters.registry }}
+  targetRepo: ${{ parameters.targetRepo }}
+  buildContext: 'test-$(prodName)'
+  imageNameTb: '$(registry)/$(targetRepo)/test-$(prodName)'
+  imageNameBase: '$(registry)/$(targetRepo)/$(prodName)'
+  tag: 'myLatest'
+  JFROG_CLI_LOG_LEVEL: DEBUG
+
+
+steps:
+  - script: |
+      # Install Buildx
+      mkdir -p ~/.docker/cli-plugins
+      DOCKER_VERSION=$(docker --version | grep -oP '\d+\.\d+\.\d+')
+      BUILDX_URL="https://github.com/docker/buildx/releases/latest/download/buildx-linux-amd64"
+
+      if curl -SL $BUILDX_URL -o ~/.docker/cli-plugins/docker-buildx; then
+        chmod +x ~/.docker/cli-plugins/docker-buildx
+        echo "Buildx installed successfully"
+      else
+        echo "Failed to download Buildx"
+        exit 1
+      fi
+
+      # Add to PATH
+      export PATH=$PATH:~/.docker/cli-plugins
+
+
+  - task: JFrogDocker@1
+    inputs:
+      command: 'Pull'
+      artifactoryConnection: 'kimt'
+      imageName: '$(imageNameBase)'
+      collectBuildInfo: true
+      buildName: '$(Build.DefinitionName)'
+      buildNumber: '$(Build.BuildNumber)'
+      includeEnvVars: true
+      skipLogin: false
+      
+
+
+
+
+  - script: |
+     docker --version  # Check Docker version
+     echo "Building and tagging Docker image..."
+     docker build . -t kimt.jfrog.io/morielp-docker/nginx:$(Build.BuildNumber)
+    displayName: 'Build and Tag Docker Image'
+
+  - task: JFrogDocker@1
+    inputs:
+      command: 'Push'
+      artifactoryConnection: 'kimt'
+      imageName: 'kimt.jfrog.io/morielp-docker/nginx:$(Build.BuildNumber)'
+      collectBuildInfo: true
+      buildName: '$(Build.DefinitionName)'
+      buildNumber: '$(Build.BuildNumber)'
+      includeEnvVars: true
+      threads: '3'
+      skipLogin: false
+
+##  - task: Docker@2
+##    displayName: Build an image
+##    inputs:
+##      command: build
+##      dockerfile: '$(Build.SourcesDirectory)/Dockerfile'
+##      arguments: '--build-arg BASEIMAGE=$(imageNameBase)'
+##      tags: $(imageNameBase):$(Build.BuildNumber)
+##      #tags: $(imageNameBase):$(Build.BuildNumber)     
+
+  - task: JFrogDocker@1
+    inputs:
+      command: 'Scan'
+      xrayConnection: 'kimt-xray'
+      imageName: 'kimt.jfrog.io/morielp-docker/nginx:$(Build.BuildNumber)'
+      #watchesSource: 'repoPath'
+      watchesSource: 'watches'
+      watches: 'morielp-azure-docker'
+      allowFailBuild: true
+      allowBypassArchiveLimits: false
+      threads: '3'
+      skipLogin: false
+  - task: JFrogPublishBuildInfo@1
+    inputs:
+      artifactoryConnection: 'kimt'
+      buildName: '$(Build.DefinitionName)'
+      buildNumber: '$(Build.BuildNumber)'
+
+
+
+  - task: JFrogBuildScan@1
+    inputs:
+      xrayConnection: 'kimt-xray'
+      buildName: '$(Build.DefinitionName)'
+      buildNumber: '$(Build.BuildNumber)'
+      allowFailBuild: true
+      vuln: true
+
+
+
+
+
+
